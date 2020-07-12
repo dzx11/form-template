@@ -1,15 +1,12 @@
 import {
   createMuiTheme,
-  makeStyles,
   ThemeProvider,
 } from "@material-ui/core/styles";
 
-import React, { createContext, lazy, Suspense, useState } from "react";
-import logo from './logo.svg';
-import Preloader from "./pages/common/Preloader";
+import React from "react";
 import './App.css';
 
-const MainPage = lazy(() => import("./pages/MainPage"));
+import MainPage from "./pages/MainPage"
 
 const theme = createMuiTheme({
   typography: {
@@ -17,16 +14,11 @@ const theme = createMuiTheme({
   },
 });
 
-export const AppContext = createContext();
-
-
 function App() {
   return (
-    <Suspense fallback={<Preloader />}>
-      <ThemeProvider theme={theme}>
-        <MainPage></MainPage>
-      </ThemeProvider>
-    </Suspense>
+    <ThemeProvider theme={theme}>
+      <MainPage></MainPage>
+    </ThemeProvider>
   );
 }
 
