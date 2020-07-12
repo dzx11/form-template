@@ -21,7 +21,6 @@ const useStyles = makeStyles((theme) => ({
 
 const MainPage = () => {
     const classes = useStyles();
-    const inputRef = useRef()
 
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
@@ -52,7 +51,6 @@ const MainPage = () => {
                         onChange={(event) => setFirstName(event.target.value)}
                         label="First Name"
                         variant="outlined"
-                        inputRef={inputRef}
                         />
                         <Button
                         variant="contained"
