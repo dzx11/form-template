@@ -36,6 +36,10 @@ const MainPage = () => {
         setDidSubmit(true);
 
     }
+
+    const firstNameError = () => {
+        return didSubmit && firstName===""
+    }
     return (
         <>
             <div className={classes.root}>
@@ -43,6 +47,8 @@ const MainPage = () => {
                     <form className={classes.form} autoComplete="off">
                         <TextField
                         id="main-page-firstname"
+                        error={firstNameError()}
+                        helperText={firstNameError() ? "Please enter first name" : ""}
                         onChange={(event) => setFirstName(event.target.value)}
                         label="First Name"
                         variant="outlined"
