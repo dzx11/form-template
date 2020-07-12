@@ -24,12 +24,16 @@ const useStyles = makeStyles((theme) => ({
       flexDirection: "column",
       justifyContent: "flex-start",
       margin: "auto",
-      marginTop:"4em",
-      marginBottom:"4em",
+      marginTop: "1em",
+      marginBottom:"1em",
       maxWidth:"800px"
+    },
+    title: {
+        margin: "1em"
     },
     form: {
         display: "flex",
+        margin: "1em",
         flexDirection: "column",
         "& > *": {
             "&:nth-child(even)": {
@@ -43,9 +47,7 @@ const useStyles = makeStyles((theme) => ({
         "& > *": {
             marginLeft: "1em"
         }
-
       },
-    
   }));
 
 const MainPage = () => {
@@ -162,7 +164,13 @@ const MainPage = () => {
         <>
             <div className={classes.root}>
                 <Paper square>
-                    <form className={classes.form} autoComplete="off">
+                    <div className={classes.title}>
+                        <h1>
+                            Sign up form
+                        </h1>
+                        <hr></hr>
+                    </div>
+                    <form className={classes.form}>
                         <TextField
                             id="main-page-firstname"
                             error={firstNameError()}
@@ -252,8 +260,8 @@ const MainPage = () => {
                         <Button
                             variant="contained"
                             onClick={submit}
+                            color="primary"
                             style={{
-                                backgroundColor: "white",
                                 fontWeight: "bold",
                                 borderRadius: "0",
                             }}
