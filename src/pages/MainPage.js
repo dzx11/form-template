@@ -37,31 +37,60 @@ const MainPage = () => {
     }
 
     const firstNameError = () => {
-        return didSubmit && firstName===""
+        return didSubmit && firstName === "";
     }
+
+    const lastNameError = () => {
+        return didSubmit && lastName === "";
+    }
+
+    const emailError = () => {
+        // Credit https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript
+        const reg = /^\S+@\S+$/;
+        const isValid = reg.test(email)
+
+        return didSubmit && !isValid;
+    }
+
     return (
         <>
             <div className={classes.root}>
                 <Paper square>
                     <form className={classes.form} autoComplete="off">
                         <TextField
-                        id="main-page-firstname"
-                        error={firstNameError()}
-                        helperText={firstNameError() ? "Please enter first name" : ""}
-                        onChange={(event) => setFirstName(event.target.value)}
-                        label="First Name"
-                        variant="outlined"
+                            id="main-page-firstname"
+                            error={firstNameError()}
+                            helperText={firstNameError() ? "Please enter first name" : ""}
+                            onChange={(event) => setFirstName(event.target.value)}
+                            label="First name"
+                            variant="outlined"
+                        />
+                        <TextField
+                            id="main-page-lastname"
+                            error={lastNameError()}
+                            helperText={lastNameError() ? "Please enter last name" : ""}
+                            onChange={(event) => setLastName(event.target.value)}
+                            label="Last name"
+                            variant="outlined"
+                        />
+                        <TextField
+                            id="main-page-email"
+                            error={emailError()}
+                            helperText={emailError() ? "Please enter email address" : ""}
+                            onChange={(event) => setEmail(event.target.value)}
+                            label="Email address"
+                            variant="outlined"
                         />
                         <Button
-                        variant="contained"
-                        onClick={submit}
-                        style={{
-                            backgroundColor: "white",
-                            width: "100vw",
-                            maxWidth: "100px",
-                            fontWeight: "bold",
-                            borderRadius: "0",
-                        }}
+                            variant="contained"
+                            onClick={submit}
+                            style={{
+                                backgroundColor: "white",
+                                width: "100vw",
+                                maxWidth: "100px",
+                                fontWeight: "bold",
+                                borderRadius: "0",
+                            }}
                         >
                         SIGN UP
                         </Button>
