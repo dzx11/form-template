@@ -1,25 +1,37 @@
-import React from 'react';
+import {
+  createMuiTheme,
+  makeStyles,
+  ThemeProvider,
+} from "@material-ui/core/styles";
+
+import React, { createContext, lazy, Suspense, useState } from "react";
 import logo from './logo.svg';
+import Preloader from "./pages/common/Preloader";
 import './App.css';
+
+const MainPage = lazy(() => import("./pages/MainPage"));
+
+const theme = createMuiTheme({
+  background: "black",
+  palette: {
+    type: "dark",
+    background: "black",
+  },
+  typography: {
+    fontFamily: ["Helvetica Neue"].join(","),
+  },
+});
+
+export const AppContext = createContext();
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Suspense fallback={<Preloader />}>
+      <ThemeProvider theme={theme}>
+        <MainPage></MainPage>
+      </ThemeProvider>
+    </Suspense>
   );
 }
 
