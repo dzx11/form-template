@@ -19,14 +19,33 @@ import React, {useState} from "react";
 const useStyles = makeStyles((theme) => ({
     root: {
       background: theme.background,
-      color: "white",
       height: "100vh",
-      width: "100vw",
       display: "flex",
       flexDirection: "column",
       justifyContent: "flex-start",
-      marginTop: "4em",
+      margin: "auto",
+      marginTop:"4em",
+      marginBottom:"4em",
+      maxWidth:"800px"
     },
+    form: {
+        display: "flex",
+        flexDirection: "column",
+        "& > *": {
+            "&:nth-child(even)": {
+            margin: "2em 0",
+            },
+        },
+    },
+    formControl: {
+        display: "flex",
+        flexDirection: "column",
+        "& > *": {
+            marginLeft: "1em"
+        }
+
+      },
+    
   }));
 
 const MainPage = () => {
@@ -235,8 +254,6 @@ const MainPage = () => {
                             onClick={submit}
                             style={{
                                 backgroundColor: "white",
-                                width: "100vw",
-                                maxWidth: "100px",
                                 fontWeight: "bold",
                                 borderRadius: "0",
                             }}
