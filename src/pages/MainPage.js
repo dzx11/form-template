@@ -9,6 +9,10 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import IconButton from '@material-ui/core/IconButton';
 
 import React, {useState} from "react";
 
@@ -32,7 +36,9 @@ const MainPage = () => {
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [termsAndConditions, setTermsAndConditions] = useState(false);
 
     const [didSubmit, setDidSubmit] = useState(false);
@@ -130,9 +136,9 @@ const MainPage = () => {
     }
 
     const termsAndConditionsError = () => {
-        console.log(termsAndConditions)
         return didSubmit && !termsAndConditions;
     }
+    
     return (
         <>
             <div className={classes.root}>
@@ -169,7 +175,20 @@ const MainPage = () => {
                             onChange={(event) => setPassword(event.target.value)}
                             label="Password"
                             variant="outlined"
-                            type="password"
+                            type={showPassword ? "text" : "password"}
+                            InputProps = {{
+                                endAdornment: 
+                                    <InputAdornment position="end">
+                                      <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={ () => setShowPassword(!showPassword)}
+                                        onMouseDown={(e) => {e.preventDefault()}}
+                                      >
+                                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                                      </IconButton>
+                                    </InputAdornment>
+                                  
+                                }}
                         />
                         <TextField
                             id="main-page-confirm-password"
@@ -178,7 +197,20 @@ const MainPage = () => {
                             onChange={(event) => setConfirmPassword(event.target.value)}
                             label="Confirm password"
                             variant="outlined"
-                            type="password"
+                            type={showConfirmPassword ? "text" : "password"}
+                            InputProps = {{
+                                endAdornment: 
+                                    <InputAdornment position="end">
+                                      <IconButton
+                                        aria-label="toggle show password visibility"
+                                        onClick={ () => setShowConfirmPassword(!showConfirmPassword)}
+                                        onMouseDown={(e) => {e.preventDefault()}}
+                                      >
+                                        {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
+                                      </IconButton>
+                                    </InputAdornment>
+                                  
+                                }}
                         />
                         <FormControl component="fieldset" className={classes.formControl}>
                             <FormLabel component="legend">Terms and conditions</FormLabel>
