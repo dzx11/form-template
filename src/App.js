@@ -12,11 +12,6 @@ import './App.css';
 const MainPage = lazy(() => import("./pages/MainPage"));
 
 const theme = createMuiTheme({
-  background: "black",
-  palette: {
-    type: "dark",
-    background: "black",
-  },
   typography: {
     fontFamily: ["Helvetica Neue"].join(","),
   },

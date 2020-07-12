@@ -1,6 +1,10 @@
 import { withStyles } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import React from "react";
+import TextField from "@material-ui/core/TextField";
+import Paper from "@material-ui/core/Paper";
+import Button from "@material-ui/core/Button";
+
+import React, {useRef, useState} from "react";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -14,13 +18,52 @@ const useStyles = makeStyles((theme) => ({
       marginTop: "4em",
     },
   }));
-  
 
 const MainPage = () => {
     const classes = useStyles();
+    const inputRef = useRef()
+
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [termsAndConditions, setTermsAndConditions] = useState(false);
+
+    const [didSubmit, setDidSubmit] = useState(false);
+
+    const submit = (e) => {
+        setDidSubmit(true);
+
+    }
     return (
         <>
-            Main Page
+            <div className={classes.root}>
+                <Paper square>
+                    <form className={classes.form} autoComplete="off">
+                        <TextField
+                        id="main-page-firstname"
+                        onChange={(event) => setFirstName(event.target.value)}
+                        label="First Name"
+                        variant="outlined"
+                        inputRef={inputRef}
+                        />
+                        <Button
+                        variant="contained"
+                        onClick={submit}
+                        style={{
+                            backgroundColor: "white",
+                            width: "100vw",
+                            maxWidth: "100px",
+                            fontWeight: "bold",
+                            borderRadius: "0",
+                        }}
+                        >
+                        SIGN UP
+                        </Button>
+                    </form>
+                </Paper>
+            </div>
         </>
     )
 }
