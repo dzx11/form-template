@@ -3,8 +3,14 @@ import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
+import Checkbox from '@material-ui/core/Checkbox';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormLabel from '@material-ui/core/FormLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormGroup from '@material-ui/core/FormGroup';
 
-import React, {useRef, useState} from "react";
+import React, {useState} from "react";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -119,6 +125,14 @@ const MainPage = () => {
         }
     }
 
+    const confirmPasswordError = () => {
+        return didSubmit && password !== confirmPassword;
+    }
+
+    const termsAndConditionsError = () => {
+        console.log(termsAndConditions)
+        return didSubmit && !termsAndConditions;
+    }
     return (
         <>
             <div className={classes.root}>
@@ -157,6 +171,33 @@ const MainPage = () => {
                             variant="outlined"
                             type="password"
                         />
+                        <TextField
+                            id="main-page-confirm-password"
+                            error={confirmPasswordError()}
+                            helperText={confirmPasswordError () ? "Confirm password doesn't match Password" : ""}
+                            onChange={(event) => setConfirmPassword(event.target.value)}
+                            label="Confirm password"
+                            variant="outlined"
+                            type="password"
+                        />
+                        <FormControl component="fieldset" className={classes.formControl}>
+                            <FormLabel component="legend">Terms and conditions</FormLabel>
+                            <FormGroup>
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            id="main-page-terms-and-conditions"
+                                            onChange={(event) => setTermsAndConditions(event.target.checked)}
+                                            color="primary"
+                                        />
+                                    }
+                                    label="I agree to the terms and conditions"
+                                />
+                            </FormGroup>
+                            <FormHelperText error={termsAndConditionsError()}>
+                                {termsAndConditionsError() ? "Please check terms and conditions" : ""}
+                            </FormHelperText>
+                        </FormControl>
                         <Button
                             variant="contained"
                             onClick={submit}
