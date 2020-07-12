@@ -31,17 +31,23 @@ const MainPage = () => {
 
     const [didSubmit, setDidSubmit] = useState(false);
 
+    // For use in passwordError
+    // 0: field is empty
+    // 1: field is valid
+    // 2: field is < 12 characters
+    // 3: field doesn't contain at least 2 upper case letters, 2 numbers, and 2 symbols
+    const pwEmpty = 0, pwValid = 1, pwShort = 2, pwSimple = 3;
+
     const submit = (e) => {
         setDidSubmit(true);
-
     }
 
     const firstNameError = () => {
-        return didSubmit && firstName === "";
+        return didSubmit && (!firstName || firstName.trim().length === 0);
     }
 
     const lastNameError = () => {
-        return didSubmit && lastName === "";
+        return didSubmit && (!lastName || lastName.trim().length === 0);
     }
 
     const emailError = () => {
@@ -50,6 +56,67 @@ const MainPage = () => {
         const isValid = reg.test(email)
 
         return didSubmit && !isValid;
+    }
+
+    const passwordError = () => {
+        // Return 0: field is empty
+        // Return 1: field is valid
+        // Return 2: field is < 12 characters
+        // Return 3: field doesn't contain at least 2 upper case letters, 2 numbers, and 2 symbols
+
+        if (didSubmit) {
+            if (password === "") {
+                return pwEmpty;
+            } else if (password.length < 12) {
+                return pwShort;
+            } else if (checkPasswordTooSimple(password)) {
+                return pwSimple;
+            } else {
+                return pwValid;
+            }
+        } else {
+            return pwValid; // don't show error if user didn't submit
+        };
+
+        function checkPasswordTooSimple(str) {
+            // field doesn't contain at least 2 upper case letters, 2 numbers, and 2 symbols
+            let upperCount = 0, numberCount = 0, symbolCount = 0;
+
+            let symbolsList = ["'", ";", ":", "/", "?", ">", ".", "<", ",", "[", "{", "}", "]", "+", "=", "-", "_", ")", "(", "*", "&", "^", "%", "$", "#", "@", "!", "~", "`", '"']
+
+            upperCount = (str.match(/[A-Z]/g) || [] ).length; // Credit https://stackoverflow.com/questions/19171240/counting-upper-and-lower-case-characters-in-a-string
+
+            for (let i = 0; i < str.length; i++) {
+                let c = str[i];
+                if (!isNaN(parseInt(c))) {
+                    numberCount++;
+                }
+                else if (symbolsList.includes(c)) {
+                    symbolCount++;
+                }
+            }
+            
+            if (upperCount < 2 || numberCount < 2 || symbolCount < 2) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    const passwordHelperText = (errorCode) => {
+        switch(errorCode) {
+            case pwEmpty:
+                return "Please enter password";
+            case pwValid:
+                return "";
+            case pwShort:
+                return "Password must be at least 12 characters long";
+            case pwSimple:
+                return "Password must contain at least 2 upper case letters, 2 numbers, and 2 symbols";
+            default:
+                return "Please enter password";
+        }
     }
 
     return (
@@ -80,6 +147,15 @@ const MainPage = () => {
                             onChange={(event) => setEmail(event.target.value)}
                             label="Email address"
                             variant="outlined"
+                        />
+                        <TextField
+                            id="main-page-password"
+                            error={passwordError() !== pwValid}
+                            helperText={passwordHelperText(passwordError())}
+                            onChange={(event) => setPassword(event.target.value)}
+                            label="Password"
+                            variant="outlined"
+                            type="password"
                         />
                         <Button
                             variant="contained"
