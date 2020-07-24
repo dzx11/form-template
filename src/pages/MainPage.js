@@ -13,8 +13,9 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import IconButton from '@material-ui/core/IconButton';
+import _ from "underscore";
 
-import React, {useState} from "react";
+import React, {useState, useRef} from "react";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -59,6 +60,7 @@ const MainPage = () => {
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [pwError, setpwError] = useState(1);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [termsAndConditions, setTermsAndConditions] = useState(false);
 
@@ -73,6 +75,7 @@ const MainPage = () => {
 
     const submit = (e) => {
         setDidSubmit(true);
+        debounced(password, true);
     }
 
     const firstNameError = () => {
@@ -89,27 +92,30 @@ const MainPage = () => {
         const isValid = reg.test(email)
 
         return didSubmit && !isValid;
-    }
+    }    
 
-    const passwordError = () => {
+    const passwordError = (pw, submitted) => {
         // Return 0: field is empty
         // Return 1: field is valid
         // Return 2: field is < 12 characters
         // Return 3: field doesn't contain at least 2 upper case letters, 2 numbers, and 2 symbols
+        let toReturn;
 
-        if (didSubmit) {
-            if (password === "") {
-                return pwEmpty;
-            } else if (password.length < 12) {
-                return pwShort;
-            } else if (checkPasswordTooSimple(password)) {
-                return pwSimple;
+        if (submitted) {
+            if (pw === "") {
+                toReturn= pwEmpty;
+            } else if (pw.length < 12) {
+                toReturn= pwShort;
+            } else if (checkPasswordTooSimple(pw)) {
+                toReturn= pwSimple;
             } else {
-                return pwValid;
+                toReturn= pwValid;
             }
         } else {
-            return pwValid; // don't show error if user didn't submit
+            toReturn= pwValid; // don't show error if user didn't submit
         };
+        setpwError(toReturn);
+        return toReturn;
 
         function checkPasswordTooSimple(str) {
             // field doesn't contain at least 2 upper case letters, 2 numbers, and 2 symbols
@@ -136,6 +142,8 @@ const MainPage = () => {
             }
         }
     }
+
+    const debounced = useRef(_.debounce( (p,s) => passwordError(p,s), 250)).current
 
     const passwordHelperText = (errorCode) => {
         switch(errorCode) {
@@ -197,9 +205,12 @@ const MainPage = () => {
                         />
                         <TextField
                             id="main-page-password"
-                            error={passwordError() !== pwValid}
-                            helperText={passwordHelperText(passwordError())}
-                            onChange={(event) => setPassword(event.target.value)}
+                            error={pwError !== pwValid}
+                            helperText={passwordHelperText(pwError)}
+                            onChange={(event) => {
+                                setPassword(event.target.value)
+                                debounced(event.target.value,didSubmit);
+                            }}
                             label="Password"
                             variant="outlined"
                             type={showPassword ? "text" : "password"}
